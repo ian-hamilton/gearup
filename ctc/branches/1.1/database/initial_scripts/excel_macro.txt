@@ -1,0 +1,385 @@
+
+Dim max As Long
+Dim sourceSheet As String
+Dim startColumn As Integer
+Dim backCount As Integer
+Dim eventLastRow As Integer
+Dim unitColumn As Integer
+Dim startDateColumn As Integer
+Dim eventDateColumn As Integer
+Dim endFormattedColumn As Integer
+
+
+
+Sub FormatData()
+
+    Initialize
+    Events
+    Attendance
+    
+    
+End Sub
+
+Sub Initialize()
+
+max = 256
+sourceSheet = "Sheet1"
+startColumn = 6
+backCount = 5
+eventLastRow = 13
+unitColumn = 7
+eventDateColumn = 5
+startDateColumn = 8
+endFormattedColumn = 13
+
+
+End Sub
+
+Sub Events()
+
+    Dim formattedDateTime As String
+
+    Dim formattedEventsSheet As String
+    formattedEventsSheet = "FormattedEvents"
+    
+    Dim ws As Worksheet
+    Set ws = Sheets.Add
+    ws.Name = formattedEventsSheet
+    
+    Sheets(sourceSheet).Select
+    
+    Do While startColumn <= max
+    
+        Cells(1, startColumn).Select
+        
+        ActiveCell.Value = startColumn - backCount
+        
+        startColumn = startColumn + 1
+    
+    Loop
+
+   
+
+    Range(Cells(1, 1), Cells(eventLastRow, max)).Select
+    
+    Selection.Copy
+    
+    Sheets(formattedEventsSheet).Select
+    
+    Selection.PasteSpecial Paste:=xlPasteAll, Operation:=xlNone, SkipBlanks:= _
+        False, Transpose:=True
+    
+    
+    Rows("1:5").Select
+    Application.CutCopyMode = False
+    Selection.Delete Shift:=xlUp
+    
+    
+   FormatEvents
+    
+    
+
+End Sub
+
+Sub FormatEvents()
+
+
+    'remind me to take this out
+    'Initialize
+
+  Columns(unitColumn).Select
+    Selection.Replace What:="21", Replacement:="21st Century '04", LookAt:= _
+        xlPart, SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+    Selection.Replace What:="Gear up", Replacement:="G", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+    Selection.Replace What:="G", Replacement:="Gear Up 3", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+        
+        
+    Columns(endFormattedColumn + 1).Select
+   ' ActiveCell.FormulaR1C1 = "=RC[-" & (endFormattedColumn + 1) - startDateColumn & "]+RC[-" & (endFormattedColumn + 1) - eventDateColumn & "]"
+    ActiveCell.FormulaR1C1 = "=RC[-" & (endFormattedColumn + 1) - eventDateColumn & "]+RC[-" & (endFormattedColumn + 1) - startDateColumn & "]"
+    'Range("N1").Select
+    Cells(1, endFormattedColumn + 2).Select
+    'ActiveCell.FormulaR1C1 = "=RC[-" & (endFormattedColumn + 2) - startDateColumn & "]+RC[-" & (endFormattedColumn + 2) - eventDateColumn & "]"
+    ActiveCell.FormulaR1C1 = "=RC[-" & (endFormattedColumn + 2) - eventDateColumn & "]+RC[-" & (endFormattedColumn + 2) - (startDateColumn + 1) & "]"
+    'Range("M1").Select
+    Cells(1, endFormattedColumn + 1).Select
+    Selection.Copy
+    Columns(endFormattedColumn + 1).Select
+    ActiveSheet.Paste
+    Cells(1, endFormattedColumn + 2).Select
+    Selection.Copy
+    Columns(endFormattedColumn + 2).Select
+    ActiveSheet.Paste
+   ' Columns(endFormattedColumn + 2).Select
+    'Application.CutCopyMode = False
+    'Selection.Copy
+    'Columns("N:N").Select
+    'ActiveSheet.Paste
+
+    Columns(endFormattedColumn + 1).Select
+    Application.CutCopyMode = False
+    Selection.NumberFormat = "mm/dd/yy h:mm:ss.000AM/PM"
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Selection.Replace What:="#VALUE!", Replacement:="", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+        
+        Columns(endFormattedColumn + 2).Select
+    Application.CutCopyMode = False
+    Selection.NumberFormat = "mm/dd/yy h:mm:ss.000AM/PM"
+    Selection.Copy
+    Selection.PasteSpecial Paste:=xlPasteValues, Operation:=xlNone, SkipBlanks _
+        :=False, Transpose:=False
+    Selection.Replace What:="#VALUE!", Replacement:="", LookAt:=xlPart, _
+        SearchOrder:=xlByRows, MatchCase:=False, SearchFormat:=False, _
+        ReplaceFormat:=False
+        
+    Columns(endFormattedColumn + 1).Select
+    Selection.Copy
+    Columns(startDateColumn).Select
+    ActiveSheet.Paste
+    
+    Columns(endFormattedColumn + 2).Select
+    Selection.Copy
+    Columns(startDateColumn + 1).Select
+    ActiveSheet.Paste
+        
+   Columns("N:IV").Select
+   Selection.Delete Shift:=xlToLeft
+   
+   Dim str As String
+   Dim row As Integer
+   Dim found As Integer
+   
+   
+   row = 0
+   str = "test"
+   
+   Do While str <> ""
+   
+        row = row + 1
+   
+        Cells(row, 2).Select
+        
+        str = ActiveCell.Value
+   
+   Loop
+   
+   
+   Rows(row & ":" & 65000).Select
+   Selection.Delete
+   'Shift:=xlUp
+   
+   
+    
+
+End Sub
+
+Sub Attendance()
+' This is the Currrent Version
+Initialize
+
+Dim formattedAttendanceSheet As String
+formattedAttendanceSheet = "FormattedAttendance"
+
+
+Dim cpsid As Long
+Dim columnPosition As Long
+
+Dim currentFormattedRow As Long
+currentFormattedRow = 1
+
+Dim columnNumber As Long
+columnNumber = startColumn
+
+Dim rowNumber As Long
+rowNumber = eventLastRow + 2
+
+Dim ws As Worksheet
+Set ws = Sheets.Add
+ws.Name = formattedAttendanceSheet
+
+Dim CountVar As Integer
+
+
+'----------------------------------------------------------
+CountVar = 0
+
+Sheets(sourceSheet).Select
+
+Cells(rowNumber, 1).Select
+
+Do While CountVar < 10
+
+    If ActiveCell.Value <> "" Then
+        columnNumber = startColumn
+        cpsid = ActiveCell.Value
+        CountVar = 0
+    
+    Else: CountVar = CountVar + 1
+    End If
+    
+    'Loop
+    
+    Do While columnNumber <= max
+   
+        Cells(rowNumber, columnNumber).Select
+        columnPosition = ActiveCell.Column
+                   
+        If ActiveCell.Value <> "" Then
+       
+            Sheets(formattedAttendanceSheet).Select
+           
+            Cells(currentFormattedRow, 1).Select
+            ActiveCell.Value = cpsid
+           
+            Cells(currentFormattedRow, 2).Select
+            ActiveCell.Value = (columnPosition - backCount)
+           
+            currentFormattedRow = currentFormattedRow + 1
+            Sheets(sourceSheet).Select
+       
+        End If
+       
+        columnNumber = columnNumber + 1
+   
+    Loop
+
+    rowNumber = rowNumber + 1
+    Cells(rowNumber, 1).Select
+
+Loop
+
+
+
+End Sub
+
+Sub facilitators()
+
+    Initialize
+
+    Dim formattedSheet As String
+    
+    formattedFacSheet = "FormattedFacilitators"
+
+    Dim facRow As Integer
+    facRow = 6
+    
+    Dim destRow As Integer
+    destRow = 1
+    
+    columnNumber = startColumn
+    
+    Dim ws As Worksheet
+    Set ws = Sheets.Add
+    ws.Name = formattedFacSheet
+    
+    Dim nameValue As Variant
+
+    Dim strArray() As String
+    
+    Do While columnNumber <= max
+    
+        Sheets(sourceSheet).Select
+    
+        Cells(facRow, columnNumber).Select
+        
+        If ActiveCell.Value <> "" Then
+        
+            strArray() = Split(ActiveCell.Value, ",")
+                  
+            Sheets(formattedFacSheet).Select
+                  
+            For Each nameValue In strArray()
+            
+                Dim innerArray() As String
+                innerArray() = Split(nameValue, " ")
+                
+                Cells(destRow, 1).Select
+                ActiveCell.Value = innerArray(0)
+                
+                Cells(destRow, 2).Select
+                ActiveCell.Value = innerArray(1)
+                
+                Cells(destRow, 3).Select
+                ActiveCell.Value = columnNumber - 5
+                
+                destRow = destRow + 1
+            
+            Next nameValue
+        
+        End If
+    
+        columnNumber = columnNumber + 1
+    
+    Loop
+    
+
+End Sub
+
+Sub programs()
+
+    Initialize
+
+    Dim formattedProgramSheet As String
+    
+    formattedProgramSheet = "FormattedPrograms"
+    
+    Dim proRow As Integer
+    proRow = 7
+    
+    Dim destRow As Integer
+    destRow = 1
+    
+    columnNumber = startColumn
+    
+    Dim ws As Worksheet
+    Set ws = Sheets.Add
+    ws.Name = formattedProgramSheet
+    
+    Dim proValue As Variant
+
+    Dim strArray() As String
+    
+    Do While columnNumber <= max
+    
+        Sheets(sourceSheet).Select
+    
+        Cells(proRow, columnNumber).Select
+        
+        If ActiveCell.Value <> "" Then
+        
+            strArray() = Split(ActiveCell.Value, ",")
+                  
+            Sheets(formattedProgramSheet).Select
+            
+            For Each proValue In strArray()
+            
+                Cells(destRow, 1).Select
+                ActiveCell.Value = proValue
+                
+                Cells(destRow, 2).Select
+                ActiveCell.Value = columnNumber - 5
+                
+                destRow = destRow + 1
+            
+            Next proValue
+            
+        
+        End If
+        
+        columnNumber = columnNumber + 1
+    
+    Loop
+
+
+End Sub
+
+

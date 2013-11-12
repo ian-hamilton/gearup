@@ -1,0 +1,100 @@
+Sub formatScores()
+
+    Dim sourceSheet As String
+    sourceSheet = "sheet1"
+    
+    Dim schoolYear As String
+    Dim testType As String
+    
+    Dim formattedScoresSheet As String
+    formattedScoresSheet = "FormattedScores"
+    
+    Dim ws As Worksheet
+    Set ws = Sheets.Add
+    ws.Name = formattedScoresSheet
+    
+    Dim cpsId As String
+    Dim score As String
+    Dim scoreCategory As String
+    
+    'Determine School Year and Test Type
+    Sheets(formattedScoresSheet).Select
+    schoolYear = InputBox("School Year")
+    testType = InputBox("Test Type")
+   
+    Dim testCount As Integer
+    
+    Dim studentCount As Integer
+    studentCount = 15
+    
+    Sheets(sourceSheet).Select
+    Cells(studentCount, 1).Select
+    
+    Dim destinationCount As Integer
+    destinationCount = 1
+    
+    cpsId = ActiveCell.Value
+  
+        
+    Do While cpsId <> ""
+    
+ 
+    
+        testCount = 11
+    
+        Cells(studentCount, testCount + 1).Select
+        
+        If Trim(ActiveCell.Value) <> "" And Trim(ActiveCell.Value) <> "." Then
+        
+        
+            Sheets(sourceSheet).Select
+        
+            Cells(2, testCount).Select
+            scoreCategory = ActiveCell.Value
+            
+            Do While scoreCategory <> ""
+            
+                Cells(studentCount, testCount).Select
+                score = ActiveCell.Value
+                
+                Sheets(formattedScoresSheet).Select
+                Cells(destinationCount, 1).Select
+                ActiveCell.Value = cpsId
+                Cells(destinationCount, 2).Select
+                ActiveCell.Value = schoolYear
+                Cells(destinationCount, 3).Select
+                ActiveCell.Value = testType
+                Cells(destinationCount, 4).Select
+                ActiveCell.Value = scoreCategory
+                Cells(destinationCount, 5).Select
+                ActiveCell.Value = score
+                
+                destinationCount = destinationCount + 1
+                
+                testCount = testCount + 1
+                
+                Sheets(sourceSheet).Select
+        
+                Cells(2, testCount).Select
+                scoreCategory = ActiveCell.Value
+            
+            Loop
+            
+        
+        End If
+        
+        studentCount = studentCount + 1
+    
+        Sheets(sourceSheet).Select
+        Cells(studentCount, 1).Select
+    
+        cpsId = ActiveCell.Value
+        
+        
+    
+    Loop
+    
+
+End Sub
+
+

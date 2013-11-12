@@ -1,0 +1,110 @@
+Sub FormatData_parents()
+
+    Initialize
+    Events
+    Attendance_parents
+    facilitators
+    programs
+    targets
+    
+    
+End Sub
+
+Sub Attendance_parents()
+' This is the Currrent Version
+Initialize
+
+Dim MyFacilityInput As String
+
+    MyFacilityInput = InputBox("This is my InputBox", _
+    "Facility", "Enter your facility text HERE")
+
+
+
+Dim formattedAttendanceSheet As String
+formattedAttendanceSheet = "FormattedAttendance"
+
+
+Dim firstName As String
+Dim lastName As String
+Dim columnPosition As Long
+
+Dim currentFormattedRow As Long
+currentFormattedRow = 1
+
+Dim columnNumber As Long
+columnNumber = startColumn
+
+Dim rowNumber As Long
+rowNumber = eventLastRow + 2
+
+Dim ws As Worksheet
+Set ws = Sheets.Add
+ws.Name = formattedAttendanceSheet
+
+Dim CountVar As Integer
+
+
+'----------------------------------------------------------
+CountVar = 0
+
+Sheets(sourceSheet).Select
+
+Cells(rowNumber, 2).Select
+
+Do While CountVar < 10
+
+    If ActiveCell.Value <> "" Then
+        columnNumber = startColumn
+        firstName = ActiveCell.Value
+        CountVar = 0
+        
+    Cells(rowNumber, 3).Select
+    
+
+        lastName = ActiveCell.Value
+        CountVar = 0
+    
+    Else: CountVar = CountVar + 1
+    End If
+    
+    'Loop
+    
+    Do While columnNumber <= max
+   
+        Cells(rowNumber, columnNumber).Select
+        columnPosition = ActiveCell.Column
+                   
+        If ActiveCell.Value <> "" Then
+       
+            Sheets(formattedAttendanceSheet).Select
+           
+            Cells(currentFormattedRow, 1).Select
+            ActiveCell.Value = firstName
+            
+            Cells(currentFormattedRow, 2).Select
+            ActiveCell.Value = lastName
+            
+            Cells(currentFormattedRow, 3).Select
+            ActiveCell.Value = MyFacilityInput
+           
+            Cells(currentFormattedRow, 4).Select
+            ActiveCell.Value = (columnPosition - backCount)
+           
+            currentFormattedRow = currentFormattedRow + 1
+            Sheets(sourceSheet).Select
+       
+        End If
+       
+        columnNumber = columnNumber + 1
+   
+    Loop
+
+    rowNumber = rowNumber + 1
+    Cells(rowNumber, 2).Select
+
+Loop
+
+
+
+End Sub

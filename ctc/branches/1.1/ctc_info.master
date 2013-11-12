@@ -1,0 +1,63 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeFile="ctc_info.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Untitled Page</title>
+    <link href="App_Themes/ThemeCTC/style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<script type="text/javascript">
+    function timedMsg() {
+        var t = setTimeout("alert('Your session has timed out due to inactivity for more than 30 minutes')", 1000 * 60 * 30)
+    }
+</script>
+
+<body onload="timedMsg()">
+    <form id="form1" runat="server">
+    <asp:ScriptManager ID="ScriptManager1" runat="server">
+    </asp:ScriptManager>
+    <!-- wrap starts here -->
+    <div id="formwrap">
+        <!--header -->
+        <div id="header">
+            <h1 id="logo-text">
+                <a href="Default.aspx" style="left: 33px; top: 25px">DREAMS!</a></h1>
+            <p id="slogan" style="left: 67px; top: 70px">
+                Data Retrieval, Entry, and Management System</p>
+            <div id="header-links">
+            </div>
+            <div>
+                &nbsp;</div>
+        </div>
+        <!-- navigation -->
+        <div id="menu">
+            <div style="padding-left: 15px">
+            </div>
+        </div>
+        <div id="content-wrap">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        <!--footer starts here-->
+        <div id="footer">
+            <p>
+                &copy; 2008 <strong>Ian Hamilton</strong> | Design by: ian hamilton&nbsp;</p>
+        </div>
+        <!-- wrap ends here -->
+        <asp:SiteMapDataSource ID="SiteMapDataSource1" runat="server" />
+        <div id="cert">
+            <span id="siteseal">
+
+                <script src="https://seal.verisign.com/getseal?host_name=dreams.neiu.edu&size=M&use_flash=YES&use_transparent=YES&lang=en"></script>
+
+                <br />
+                <a href="http://www.verisign.com/ssl-certificate/" target="_blank" style="color: #000000;
+                    text-decoration: none; font: bold 7px verdana,sans-serif; letter-spacing: .5px;
+                    text-align: center; margin: 0px; padding: 0px;">ABOUT SSL CERTIFICATES</a>
+            </span>
+        </div>
+    </div>
+    </form>
+</body>
+</html>

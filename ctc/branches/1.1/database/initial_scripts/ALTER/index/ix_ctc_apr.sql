@@ -1,0 +1,8 @@
+create nonclustered 
+index ix_ctc_apr_1
+on ctc.apr(base_apr)
+WITH (STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF,
+DROP_EXISTING = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF,
+ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = OFF)
+
+go

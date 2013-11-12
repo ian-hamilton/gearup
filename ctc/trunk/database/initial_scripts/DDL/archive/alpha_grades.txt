@@ -1,0 +1,49 @@
+create table gearup.alpha_grades
+(alpha_grade_id bigint identity(1,1),
+alpha_student_id bigint not null,
+course_number int not null,
+course_name varchar(30) not null,
+unit_number int not null,
+section_number int not null,
+period_number int not null,
+class_absences int null,
+cumulative_absences int null,
+GPA numeric(3,2) null,
+school_year int not null,
+semester int not null,
+status_flag int not null default 1,
+row_created datetime not null default getdate(),
+row_updated datetime not null default getdate(),
+row_created_by_user_id varchar(15) not null,
+row_updated_by_user_id varchar(15) not null)
+
+go
+
+ALTER TABLE gearup.alpha_grades
+ADD CONSTRAINT
+pk_gearup_alpha_grades PRIMARY KEY NONCLUSTERED
+(
+alpha_grade_id
+)
+WITH (STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF,
+ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+
+go
+
+alter table gearup.alpha_grades
+with check
+add constraint fk_gearup_alpha_grades_1
+foreign key (alpha_student_id)
+references gearup.alpha_student(alpha_student_id)
+on delete cascade
+
+go
+
+create nonclustered 
+index ix_gearup_alpha_grades_1
+on gearup.alpha_grades(alpha_student_id asc)
+WITH (STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF,
+DROP_EXISTING = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF,
+ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = OFF)
+
+go
